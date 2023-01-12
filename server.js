@@ -1,51 +1,61 @@
 const inquirer = require("inquirer");
-const mysql = require("mysql2");
-const db = require("./db");
+const db = require("./db/connection");
 require("console.table");
 
-const app = async() => {
-    inquirer.prompt({
+const app = async () => {
+
+    const data = await inquirer.prompt({
         type: 'list',
         message: 'What would you like to do?',
         name: 'action',
         choices: ['View All Employees', 'Add Employee', 'Update Employee Role', 'View All Roles', 'Add Role', 'View All Departments', 'Add Department', 'Exit Application']
     })
-    .then(data => {
-        if (data.action === 'View All Employees') {
-            viewEmployees();
-        }
-        if (data.action === 'Add Employee') {
-            addEmployee();
-        }
-        if (data.action === 'Update Employee Role') {
-            updateEmployeeRole();
-        }
-        if (data.action === 'View All Roles') {
-            viewRoles();
-        }
-        if (data.action === 'Add Role') {
-            addRole();
-        }
-        if (data.action === 'View All Departments') {
-            viewDepartments();
-        }
-        if (data.action === 'Add Department') {
-            addDepartment();
-        }
-        else if (data.action === 'Exit Application') {
-            
-        }
-    })
+
+    if (data.action === 'View All Employees') {
+        viewEmployees();
+    }
+    if (data.action === 'Add Employee') {
+        addEmployee();
+    }
+    if (data.action === 'Update Employee Role') {
+        updateEmployeeRole();
+    }
+    if (data.action === 'View All Roles') {
+        viewRoles();
+    }
+    if (data.action === 'Add Role') {
+        addRole();
+    }
+    if (data.action === 'View All Departments') {
+        viewDepartments();
+    }
+    if (data.action === 'Add Department') {
+        addDepartment();
+    }
+    else if (data.action === 'Exit Application') {
+
+    }
+
 }
 
-const viewEmployees = async() => {
-    console.log('=================== Employees ====================');
-    //display employees in db
+const viewEmployees = async () => {
+    console.log('======================================= Employees =========================================');
+    const response = await db.promise().query(
+        "Select employee.id as id, employee.first_name, employee.last_name, role.title, department.name as department, role.salary, employee.manager_id as manager from employee left join role on employee.role_id = role.id left join department on role.department_id = department.id;") //how to get manager name instead of id number?
+    console.table(response[0]);
+    app();
 }
 
-const addEmployee = async() => {
-    console.log('\n Please enter new employee information:')
-    inquirer.prompt([
+const addEmployee = async () => {
+    console.log('\n ===== Please enter new employee information: =====')
+    const roles = await db.promise().query('select * from role');
+    const roleChoices = roles[0].map(role => {
+        return { name: role.title, value: role.id }
+    });
+
+    const employee = await db.promise().query('select * from employee');
+    const manager = employee[0] //how to retrieve list of manager names
+    const data = await inquirer.prompt([
         {
             type: 'input',
             message: 'New Employee first name: ',
@@ -60,19 +70,18 @@ const addEmployee = async() => {
             type: 'list',
             message: 'New Employee Role: ',
             name: 'employeeRole',
-            choices: [] //list of existing roles in db
+            choices: roleChoices //list of existing roles in db
         },
         {
             type: 'list',
             message: "Who is the new employee's manager?",
             name: 'newEmployeeManager',
-            choices: ['None'] //make it so that the choices mirror the manager role of list of employees
+            choices: ['null'] //make it so that the choices mirror the manager role of list of employees
         }
     ])
-    .then(data => {
-
-    })
-}
+    console.log(data);
+    const newEmployee = db.query(`insert into employee (first_name, last_name, role_id, manager_id) values ('${data.employeeFirstName}', '${data.employeeLastName}', '${data.employeeRole}', ${data.newEmployeeManager})`)
+};
 
 
 
@@ -81,7 +90,22 @@ const addEmployee = async() => {
 
 app();
 
+// const arr = [
+//     {name: "sean" , id: 10 , cool:true},
+//     {name: "bob" , id: 4 , cool:false},
+//     {name: "sally" , id: 0 , cool:true},
+//     {name: "michelle" , id: 5 , cool:true},
+//     {name: "andy" , id: 3 , cool:false},
+// ]
 
+// const newArr = arr.map(person => {
+//     return {nickname:person.name}
+// })
+
+// [{name:"bob", value: 4}]
+
+
+// console.log(newArr)
 
 /*
   REMOVE COMMENTS BEFORE SUBMITTING YOUR HOMEWORK
