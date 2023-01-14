@@ -1,6 +1,13 @@
 const inquirer = require("inquirer");
 const db = require("./db/connection");
+const logo = require('asciiart-logo');
 require("console.table");
+
+console.log(logo({
+    name: 'Employee Manager',
+    logoColor: 'bold-cyan',
+    padding: 1,
+}).render());
 
 const app = async () => {
 
@@ -33,7 +40,8 @@ const app = async () => {
         addDepartment();
     }
     else if (data.action === 'Exit Application') {
-
+        console.log('Goodbye')
+        return
     }
 
 }
@@ -74,21 +82,104 @@ const addEmployee = async () => {
         },
         {
             type: 'list',
-            message: "Who is the new employee's manager?",
+            message: "Eew employee's manager?",
             name: 'newEmployeeManager',
             choices: ['null'] //make it so that the choices mirror the manager role of list of employees
         }
     ])
     console.log(data);
-    const newEmployee = db.query(`insert into employee (first_name, last_name, role_id, manager_id) values ('${data.employeeFirstName}', '${data.employeeLastName}', '${data.employeeRole}', ${data.newEmployeeManager})`)
+    const newEmployee = (db.query(`insert into employee (first_name, last_name, role_id, manager_id) values ('${data.employeeFirstName}', '${data.employeeLastName}', '${data.employeeRole}', ${data.newEmployeeManager})`), console.log(`'${data.employeeLastName}, ${data.employeeFirstName}' has been added to employee database.`));;
+    app();
 };
 
+const updateEmployeeRole = async () => {
+    // const employeesData = await db.promise().query(
+    //     'select * from employee;');
+        const employeeData= await db.promise().query(
+            'select concat(last_name, " ", first_name) as full_name, id from employee;');
+        //const employees = employeesData[0];
+       // console.log(employeeData[0]);
 
+    const employeeChoice = employeeData[0].map(employee => {
+        return { name: employee.full_name, value: employee.id } 
+    });
+    console.log(employeeChoice);
+    const data = await inquirer.prompt([
+        {
+            type: 'list',
+            message: 'Select employee to be updated: ',
+            name: 'employeeName',
+            choices: employeeChoice
+        }
+    ])
+    //console.log(data)
+}
 
+const viewRoles = async () => {
+    console.log('========== Roles ==========')
+    const rolesTable = await db.promise().query(
+        "select id, title from role;");
+    const roles = rolesTable[0];
+    console.table(roles);
+    app();
+};
 
+const addRole = async () => {
+    const depts= await db.promise().query(
+        'select * from department;');
+    const deptChoices = depts[0].map(department => {
+        return { name: department.name, value: department.id }
+    })
+    console.log(deptChoices);
+    const data = await inquirer.prompt([
+        {
+            type: 'input',
+            message: 'What is the title of the new role?',
+            name: 'newRoleTitle'
+        },
+        {
+            type: 'number',
+            message: 'What is the salary for this role?',
+            name: 'newRoleSalary'
+        },
+        {
+            type: 'list',
+            message: 'Which department does this role work under?',
+            name: 'newRoleDepartment',
+            choices: deptChoices
+        }
+    ])
+    console.log(data);
+    const newRole = (db.query(`insert into role (title, salary, department_id) values ('${data.newRoleTitle}', ${data.newRoleSalary}, ${data.newRoleDepartment});`), console.log(`Role '${data.newRoleTitle} has been added!'`));
+    app();
+};
 
+const viewDepartments = async () => {
+    console.log('========== Departments ==========')
+    const departmentTable = await db.promise().query(
+        'select * from department;');
+    const departments = departmentTable[0];
+    console.table(departments);
+    app();
+};
+
+const addDepartment = async () => {
+    const data = await inquirer.prompt(
+        {
+            type: 'input',
+            message: 'Name of the new department',
+            name: 'newDepartmentName'
+        });
+    const newDepartment = (db.query(
+        `insert into department(name) values ('${data.newDepartmentName}');`), console.log(`Department ${data.newDepartmentName} has been added!`));
+    app();
+}
 
 app();
+
+
+
+
 
 // const arr = [
 //     {name: "sean" , id: 10 , cool:true},
