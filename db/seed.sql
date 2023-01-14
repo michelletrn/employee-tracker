@@ -9,3 +9,4 @@ values ('Sales Lead', 100000, 4), ('Sales Person', 80000, 4), ('Lead Engineer', 
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 values ('John', 'Doe', 1, null), ('Mike', 'Chan', 2, 1), ('Ashley', 'Rodriguez', 3, null), ('Kevin', 'Tupik', 4, 3), ('Jessica', 'Singh', 5, null), ('Brian', 'Brown', 6, 5), ('Sarah', 'Nguyen', 7, null), ('Jason', 'Pierce', 8, 7);
+

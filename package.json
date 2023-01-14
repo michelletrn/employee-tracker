@@ -11,6 +11,7 @@
   "dependencies": {
     "asciiart-logo": "^0.2.7",
     "console.table": "^0.10.0",
+    "dotenv": "^16.0.3",
     "inquirer": "^7.0.0",
     "mysql2": "^2.1.0"
   }
