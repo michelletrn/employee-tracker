@@ -82,7 +82,7 @@ const addEmployee = async () => {
   const managerChoices = employee[0].map((manager) => {
     return { name: manager.full_name, value: manager.id };
   });
-  console.log(managerChoices);
+  //console.log(managerChoices);
 
   const data = await inquirer.prompt([
     {
@@ -108,8 +108,7 @@ const addEmployee = async () => {
       choices: managerChoices, //need to add a none choice
     },
   ]);
-  console.log(data);
-  //query is not running
+  // console.log(data);
   const newEmployee =
     (db.query(
       `insert into employee (first_name, last_name, role_id, manager_id) values ('${data.employeeFirstName}', '${data.employeeLastName}', '${data.employeeRole}', ${data.newEmployeeManager})`
@@ -171,7 +170,7 @@ const addRole = async () => {
   const deptChoices = depts[0].map((department) => {
     return { name: department.name, value: department.id };
   });
-  console.log(deptChoices);
+  //console.log(deptChoices);
   const data = await inquirer.prompt([
     {
       type: "input",
@@ -190,7 +189,7 @@ const addRole = async () => {
       choices: deptChoices,
     },
   ]);
-  console.log(data);
+  //   console.log(data);
   const newRole =
     (db.query(
       `insert into role (title, salary, department_id) values ('${data.newRoleTitle}', ${data.newRoleSalary}, ${data.newRoleDepartment});`
