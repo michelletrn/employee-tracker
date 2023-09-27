@@ -59,6 +59,12 @@ Follow the prompts in the command line to interact with the employee database. S
 
 ## Contributions
 
+1. Fork the project.
+2. Create your feature branch (git checkout -b feature/your-feature).
+3. Commit your changes (git commit -m 'Add your feature').
+4. Push to the branch (git push origin feature/your-feature).
+5. Open a pull request.
+
 Contributors: Michelle Tran
 
 ## License
