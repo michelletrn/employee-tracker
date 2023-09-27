@@ -24,22 +24,38 @@ This command-line application is designed to manage a company's employee databas
 
 ## Installation
 
-- clone repo into your local environment
-- make sure to have Node.js and run 'npm i' to install necessary packages
+1. clone repo into your local environment by running:
+```
+    git clone https://github.com/michelletrn/employee-tracker.git
+```
+2. Navigate to the project directory:
+```
+    cd employee-tracker
+```
+3. Install dependencies using npm:
+```
+    npm i
+```
+4. Configure MySQL connection 
+5. Run the application in the command-line:
+```
+    node server.js 
+
+        OR
+
+    npm start
+```
 
 ## Usage
 
 Instructions for use
 
-- first, follow installation instructions then follow instructions bellow
-- run 'npm start' to start application
+Follow the prompts in the command line to interact with the employee database. Select from the available options to view, add, update, or delete employee records and related information.
 - **please note that this application does come with seed data**
 
 ## Walkthrough Video
 
-- Demo video: 
-<iframe src="https://drive.google.com/file/d/1s1qsKEej8w6BKTrB-GOEBSlC3L76EPzl/view" width="640" height="480"></iframe>
-
+- Watch the walkthrough video [here](https://drive.google.com/file/d/1s1qsKEej8w6BKTrB-GOEBSlC3L76EPzl/view).
 
 ## Contributions
 
